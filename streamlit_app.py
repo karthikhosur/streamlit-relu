@@ -25,14 +25,15 @@ selected_page = st.sidebar.radio("Navigation", list(pages.keys()), index=0)
 st.title(selected_page)
 st.write(pages[selected_page])
 
-data,count = supabase.table("webhook_listener").select('*').neq('processed','done').execute()
+data,count = supabase.table("webhook_listener").select('*').execute()
 # .eq('processed','new')
 
 result = data[1]
 
 
 for r in result:
-    if 'method' not in r and 'body' in r and 'type' in r['body']:
+    print(r)
+    if 'method'  not in r and 'body' in r and 'type' in r['body'] and r['processed'] != 'done':
         if r['body']['type'] == 'payment.created':
             payment_id = ""
             customer_id = ""
